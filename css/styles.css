@@ -113,6 +113,17 @@ body {
     font-size: 1.05rem;
 }
 
+
+/* Tarjetas de Tareas */
+.tarjeta-tarea {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-tarea:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08) !important;
+}
 /* Estilos de prueba para badges/etiquetas de color en tarjetas futuras 
 .badge-menta { background-color: var(--cat-trabajo); color: var(--texto-principal); }
 .badge-crema { background-color: var(--cat-tareas); color: var(--texto-principal); }
