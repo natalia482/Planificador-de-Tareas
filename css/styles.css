@@ -1,0 +1,120 @@
+:root {
+  /* Paleta Pastel */
+  --fondo: #FBF9F6;               
+  --texto-principal: #333A42;      
+  
+  --accent-pastel: #DAB6C4;      
+  --accent-pastel-hover: #C59DB0; 
+  
+  --cat-trabajo: #D4E2D4;        
+  --cat-tareas: #FFF2CC;         
+  --cat-rutinas: #E3E7F1;        
+  --cat-destacado: #FCD5CE;     
+
+  /* Fuentes */
+  --fuente-titulos: "Fascinate", display;
+  --fuente-subtitulos: "Electrolize", sans-serif;
+  --fuente-cuerpo: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--fondo);
+  color: var(--texto-principal);
+  font-family: var(--fuente-cuerpo);
+}
+
+/* Header */
+.titulo-header {
+  font-family: var(--fuente-titulos);
+  color: var(--texto-principal);
+}
+
+.subtitulo-seccion {
+  font-family: var(--fuente-subtitulos);
+  font-weight: 700;
+}
+
+/* Nav Tabs Pastel */
+.nav-custom {
+  background-color: var(--cat-rutinas);
+  font-family: var(--fuente-subtitulos);
+}
+
+.nav-custom .nav-link {
+  color: var(--texto-principal);
+  border: none;
+  font-size: 1.5rem;
+  transition: all 0.2s ease-in-out;
+  border-radius: 8px;
+}
+
+.nav-custom .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-custom .nav-link.active {
+  background-color: var(--accent-pastel);
+  color: #333A42;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón Principal (Nueva Tarea) */
+.btn-principal {
+  background-color: var(--accent-pastel);
+  color: var(--texto-principal);
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0.5rem 1.25rem;
+  border-radius: 10px;
+}
+
+.btn-principal:hover,
+.btn-principal:active {
+  background-color: var(--accent-pastel-hover);
+  color: var(--texto-principal);
+}
+
+/* Botones Filtro (Chips) */
+.btn-filtro {
+  background-color: var(--cat-tareas);
+  color: var(--texto-principal);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 0.35rem 1.1rem;
+  font-weight: 500;
+  font-size: 1.3rem;
+  transition: all 0.2s ease;
+}
+
+.btn-filtro:hover {
+  background-color: var(--cat-destacado);
+}
+
+.btn-filtro.active {
+  background-color: var(--cat-trabajo);
+  color: var(--texto-principal);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Offcanvas */
+.offcanvas-bottom {
+  max-height: 85vh;
+  background-color: var(--fondo);
+}
+
+.offcanvas-title {
+  font-family: var(--fuente-titulos);
+}
+
+.form-label{
+    font-family: var(--fuente-subtitulos);
+    font-size: 1.05rem;
+}
+
+/* Estilos de prueba para badges/etiquetas de color en tarjetas futuras 
+.badge-menta { background-color: var(--cat-trabajo); color: var(--texto-principal); }
+.badge-crema { background-color: var(--cat-tareas); color: var(--texto-principal); }
+.badge-lavanda { background-color: var(--cat-rutinas); color: var(--texto-principal); }
+.badge-durazno { background-color: var(--cat-destacado); color: var(--texto-principal); }*/
