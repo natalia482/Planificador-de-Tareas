@@ -124,8 +124,8 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08) !important;
 }
-/* Estilos de prueba para badges/etiquetas de color en tarjetas futuras 
+/* Estilos de prueba para badges/etiquetas de color en tarjetas futuras */
 .badge-menta { background-color: var(--cat-trabajo); color: var(--texto-principal); }
 .badge-crema { background-color: var(--cat-tareas); color: var(--texto-principal); }
 .badge-lavanda { background-color: var(--cat-rutinas); color: var(--texto-principal); }
-.badge-durazno { background-color: var(--cat-destacado); color: var(--texto-principal); }*/
+.badge-durazno { background-color: var(--cat-destacado); color: var(--texto-principal); }
