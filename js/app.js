@@ -1,5 +1,6 @@
-// Arreglo global de tareas
-const listaDeTareas = [];
+//SPRINT 2
+const taskManager = new TaskManager();
+
 
 // Captura de elementos del DOM
 const formulario = document.getElementById("form-Planificador");
@@ -40,7 +41,7 @@ function mostrarAlertas(mensaje, tipo) {
     }, 3500);
 }
 
-// Capturar tarea desde el formulario
+// Capturar tarea desde el formulario y registrar en TaskMananger(Sprint 2 Tarea 5)
 function capturarTarea(evento) {
     evento.preventDefault();
 
@@ -74,21 +75,18 @@ function capturarTarea(evento) {
         prioridadTexto = "Secundario";
     }
 
-    // Determina si se guarda como Completada o Pendiente desde el switch del modal
-    const estadoInicial = switchTareaModal && switchTareaModal.checked ? "Completada" : "Pendiente";
+    //Registrar en TaskManager, estado inicial por defecto sera "Pendiente"
+    taskManager.addTask(
+        inputProyecto.value.trim(),
+        inputTarea.value.trim(),
+        textareaDescripcion.value.trim(),
+        prioridadTexto,
+        inputFecha.value
+    );
 
-    const nuevaTarea = {
-        id: Date.now(),
-        nombre: inputProyecto.value.trim(),
-        tarea: inputTarea.value.trim(),
-        descripcion: textareaDescripcion.value.trim(),
-        prioridad: prioridadTexto,
-        fecha: inputFecha.value,
-        estado: estadoInicial
-    };
-
-    listaDeTareas.push(nuevaTarea);
+    console.log(taskManager.task);
     formulario.reset();
+    
 
     // Restablecer el switch del modal al estado inicial
     if (switchTareaModal && labelSwitchModal) {
@@ -119,7 +117,7 @@ if (formulario) {
 function mostrarTareas() {
     contenedorTareas.innerHTML = "";
 
-    if (listaDeTareas.length === 0) {
+    if (taskManager.task.length === 0) {
         contenedorTareas.innerHTML = `
         <div class="col-12 text-center py-5 text-muted">
             <i class="bi bi-journal-text fs-1"></i>
@@ -129,9 +127,9 @@ function mostrarTareas() {
         return;
     }
 
-    listaDeTareas.forEach((tarea) => {
+    taskManager.task.forEach((tarea) => {
         let claseBadge = "badge-menta";
-        if (tarea.estado === "Completada") {
+        if (tarea.prioridad === "Completada") {
             claseBadge = "badge-lavanda";
         } else if (tarea.prioridad === "Urgente") {
             claseBadge = "badge-durazno";
@@ -147,18 +145,18 @@ function mostrarTareas() {
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title fw-bold m-0 ${tarea.estado === 'Completada' ? 'text-decoration-line-through text-muted' : ''}">${tarea.tarea}</h5>
-              <span class="badge ${claseBadge} px-2 py-1">${tarea.estado === 'Completada' ? 'Completada' : tarea.prioridad}</span>
+              <h5 class="card-title fw-bold m-0 ${tarea.prioridad === 'Completada' ? 'text-decoration-line-through text-muted' : ''}">${tarea.nameTask}</h5>
+              <span class="badge ${claseBadge} px-2 py-1">${tarea.status === 'Completada' ? 'Completada' : tarea.priority}</span>
             </div>
             <h6 class="text-secondary small mb-2"><i class="bi bi-archive me-1"></i>${tarea.nombre}</h6>
-            <p class="card-text text-muted small">${tarea.descripcion}</p>
+            <p class="card-text text-muted small">${tarea.description}</p>
           </div>
           <div class="pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
-            <span><i class="bi bi-calendar3 me-1"></i> ${tarea.fecha}</span>
+            <span><i class="bi bi-calendar3 me-1"></i> ${tarea.entrega}</span>
             
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switch-${tarea.id}" ${tarea.estado === "Completada" ? "checked" : ""} onchange="cambiarEstadoTarea(${tarea.id})">
-                <label class="form-check-label small" for="switch-${tarea.id}">${tarea.estado === "Completada" ? "Finalizada" : "Pendiente"}</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="switch-${tarea.id}" ${tarea.priority === "Completada" ? "checked" : ""} onchange="cambiarEstadoTarea(${tarea.id})">
+                <label class="form-check-label small" for="switch-${tarea.id}">${tarea.priority === "Completada" ? "Finalizada" : "Pendiente"}</label>
             </div>
 
             <button class="btn btn-sm btn-outline-danger border-0" onclick="eliminarTarea(${tarea.id})">
@@ -175,16 +173,16 @@ function mostrarTareas() {
 
 // Cambiar estado de completado desde la tarjeta
 function cambiarEstadoTarea(id) {
-    const tarea = listaDeTareas.find((t) => t.id === id);
+    const tarea = taskManager.task.find((t) => t.id === id);
     if (tarea) {
-        tarea.estado = tarea.estado === "Completada" ? "Pendiente" : "Completada";
+        tarea.priority = tarea.priority=== "Completada" ? "Pendiente" : "Completada";
         mostrarTareas();
     }
 }
 
 // Eliminar tarea por ID
 function eliminarTarea(id) {
-    const indice = listaDeTareas.findIndex((t) => t.id === id);
+    const indice = taskManager.task.findIndex((t) => t.id === id);
     if (indice !== -1) {
         listaDeTareas.splice(indice, 1);
         mostrarTareas();
@@ -194,8 +192,3 @@ function eliminarTarea(id) {
 // Carga inicial al abrir la app
 mostrarTareas();
 
-
-//SPRINT 2
-const taskManager = new TaskManager();
-
-console.log(taskManager.task);
