@@ -1,0 +1,118 @@
+/* Contenedor general del calendario */
+.calendario-contenedor {
+    background-color: #ffffff;
+}
+
+/* Cuadrícula de 7 columnas (Domingo a Sábado) */
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-top: 1px solid #e9ecef;
+    border-left: 1px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Encabezado de los días de la semana */
+.dia-semana {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-family: 'Electrolize', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.75rem 0.25rem;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Celdas individuales de cada día */
+.celda-dia {
+    min-height: 110px;
+    padding: 0.5rem;
+    background-color: #ffffff;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.celda-dia:hover {
+    background-color: #fcfcfd;
+}
+
+/* Número del día */
+.numero-dia {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #495057;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 2px;
+}
+
+/* Resaltado para el día actual */
+.celda-dia.dia-actual {
+    background-color: #f8f7ff;
+}
+
+.celda-dia.dia-actual .numero-dia {
+    background-color: #6c63ff;
+    color: #ffffff;
+}
+
+/* Días fuera del mes actual */
+.celda-dia.otro-mes {
+    background-color: #fafafa;
+}
+
+.celda-dia.otro-mes .numero-dia {
+    color: #adb5bd;
+    font-weight: 400;
+}
+
+/* Etiquetas de tareas dentro de cada celda */
+.evento-pill {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.evento-pill:hover {
+    transform: translateY(-1px);
+}
+
+/* Puntos de la leyenda superior */
+.punto-leyenda {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Ajuste responsivo para pantallas móviles */
+@media (max-width: 768px) {
+    .celda-dia {
+        min-height: 75px;
+        padding: 0.35rem;
+    }
+
+    .evento-pill {
+        font-size: 0.65rem;
+        padding: 2px 5px;
+    }
+}

@@ -1,6 +1,6 @@
-//SPRINT 2
+// SPRINT 2
 const taskManager = new TaskManager();
-
+taskManager.load(); // Carga las tareas guardadas antes de pintarlas
 
 // Captura de elementos del DOM
 const formulario = document.getElementById("form-Planificador");
@@ -11,7 +11,6 @@ const contenedorTareas = document.getElementById("contenedor-tareas");
 const switchTareaModal = document.getElementById("switchCheckChecked");
 const labelSwitchModal = document.querySelector("label[for='switchCheckChecked']");
 
-// Listener para cambiar el texto del switch dentro del modal en tiempo real
 if (switchTareaModal && labelSwitchModal) {
     switchTareaModal.addEventListener("change", () => {
         if (switchTareaModal.checked) {
@@ -41,7 +40,7 @@ function mostrarAlertas(mensaje, tipo) {
     }, 3500);
 }
 
-// Capturar tarea desde el formulario y registrar en TaskMananger(Sprint 2 Tarea 5)
+// Capturar tarea desde el formulario y registrar en TaskManager
 function capturarTarea(evento) {
     evento.preventDefault();
 
@@ -75,7 +74,7 @@ function capturarTarea(evento) {
         prioridadTexto = "Secundario";
     }
 
-    //Registrar en TaskManager, estado inicial por defecto sera "Pendiente"
+    // Registrar en TaskManager (estado inicial por defecto será 'PORHACER')
     taskManager.addTask(
         inputProyecto.value.trim(),
         inputTarea.value.trim(),
@@ -83,12 +82,11 @@ function capturarTarea(evento) {
         prioridadTexto,
         inputFecha.value
     );
+    taskManager.save();
 
-    console.log(taskManager.task);
+    console.log(taskManager.tasks);
     formulario.reset();
-    
 
-    // Restablecer el switch del modal al estado inicial
     if (switchTareaModal && labelSwitchModal) {
         switchTareaModal.checked = false;
         labelSwitchModal.textContent = "¿Tarea Finalizada?";
@@ -97,7 +95,7 @@ function capturarTarea(evento) {
 
     mostrarTareas();
 
-    // Cierre automático del Offcanvas/Modal
+    // Cierre automático del Offcanvas
     const elementoOffcanvas = document.getElementById("offcanvasNuevaTarea");
     if (elementoOffcanvas) {
         const instanciaOffcanvas = bootstrap.Offcanvas.getInstance(elementoOffcanvas);
@@ -113,11 +111,25 @@ if (formulario) {
     formulario.addEventListener("submit", capturarTarea);
 }
 
+// Delegación de eventos para eliminar tarea desde el botón .delete-button
+if (contenedorTareas) {
+    contenedorTareas.addEventListener("click", (event) => {
+        const botonEliminar = event.target.closest(".delete-button");
+        if (botonEliminar) {
+            const tarjeta = botonEliminar.closest("[data-task-id]");
+            const taskId = Number(tarjeta.dataset.taskId);
+            taskManager.deleteTask(taskId);
+            taskManager.save();
+            mostrarTareas();
+        }
+    });
+}
+
 // Dibujar las tareas en el HTML
 function mostrarTareas() {
     contenedorTareas.innerHTML = "";
 
-    if (taskManager.task.length === 0) {
+    if (taskManager.tasks.length === 0) {
         contenedorTareas.innerHTML = `
         <div class="col-12 text-center py-5 text-muted">
             <i class="bi bi-journal-text fs-1"></i>
@@ -127,39 +139,40 @@ function mostrarTareas() {
         return;
     }
 
-    taskManager.task.forEach((tarea) => {
+    taskManager.tasks.forEach((tarea) => {
         let claseBadge = "badge-menta";
-        if (tarea.prioridad === "Completada") {
+        if (tarea.status === "Completada") {
             claseBadge = "badge-lavanda";
-        } else if (tarea.prioridad === "Urgente") {
+        } else if (tarea.priority === "Urgente") {
             claseBadge = "badge-durazno";
-        } else if (tarea.prioridad === "Importante") {
+        } else if (tarea.priority === "Importante") {
             claseBadge = "badge-crema";
         }
 
         const col = document.createElement("div");
         col.className = "col-12 col-md-6 col-lg-4";
+        col.dataset.taskId = tarea.id;
 
         col.innerHTML = `
       <div class="card h-100 border-0 shadow-sm tarjeta-tarea">
         <div class="card-body d-flex flex-column justify-content-between">
           <div>
             <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title fw-bold m-0 ${tarea.prioridad === 'Completada' ? 'text-decoration-line-through text-muted' : ''}">${tarea.nameTask}</h5>
+              <h5 class="card-title fw-bold m-0 ${tarea.status === 'Completada' ? 'text-decoration-line-through text-muted' : ''}">${tarea.nameTask}</h5>
               <span class="badge ${claseBadge} px-2 py-1">${tarea.status === 'Completada' ? 'Completada' : tarea.priority}</span>
             </div>
-            <h6 class="text-secondary small mb-2"><i class="bi bi-archive me-1"></i>${tarea.nombre}</h6>
+            <h6 class="text-secondary small mb-2"><i class="bi bi-archive me-1"></i>${tarea.nameProjects}</h6>
             <p class="card-text text-muted small">${tarea.description}</p>
           </div>
           <div class="pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
             <span><i class="bi bi-calendar3 me-1"></i> ${tarea.entrega}</span>
             
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switch-${tarea.id}" ${tarea.priority === "Completada" ? "checked" : ""} onchange="cambiarEstadoTarea(${tarea.id})">
-                <label class="form-check-label small" for="switch-${tarea.id}">${tarea.priority === "Completada" ? "Finalizada" : "Pendiente"}</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="switch-${tarea.id}" ${tarea.status === "Completada" ? "checked" : ""} onchange="cambiarEstadoTarea(${tarea.id})">
+                <label class="form-check-label small" for="switch-${tarea.id}">${tarea.status === "Completada" ? "Finalizada" : "Pendiente"}</label>
             </div>
 
-            <button class="btn btn-sm btn-outline-danger border-0" onclick="eliminarTarea(${tarea.id})">
+            <button class="btn btn-sm btn-outline-danger border-0 delete-button">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -173,22 +186,13 @@ function mostrarTareas() {
 
 // Cambiar estado de completado desde la tarjeta
 function cambiarEstadoTarea(id) {
-    const tarea = taskManager.task.find((t) => t.id === id);
+    const tarea = taskManager.tasks.find((t) => t.id === id);
     if (tarea) {
-        tarea.priority = tarea.priority=== "Completada" ? "Pendiente" : "Completada";
-        mostrarTareas();
-    }
-}
-
-// Eliminar tarea por ID
-function eliminarTarea(id) {
-    const indice = taskManager.task.findIndex((t) => t.id === id);
-    if (indice !== -1) {
-        listaDeTareas.splice(indice, 1);
+        tarea.status = tarea.status === "Completada" ? "PORHACER" : "Completada";
+        taskManager.save();
         mostrarTareas();
     }
 }
 
 // Carga inicial al abrir la app
 mostrarTareas();
-
